@@ -6,35 +6,66 @@ Skills are structured prompts that enforce proven workflows. Instead of hoping C
 
 > Built from real production incidents, security audits, and engineering workflows. Not theory — practice.
 
-## Quick Start
+## How to Use
 
-**1. Pick a skill** from the catalog below.
+Skills work as [custom slash commands](https://docs.anthropic.com/en/docs/claude-code/tutorials#create-custom-slash-commands) in Claude Code. Drop a `.md` file into the right directory and it becomes a `/command` you can use in any session.
 
-**2. Copy it** to your project or user commands directory:
+### Install All Skills (Recommended)
+
+Make every skill available in every Claude Code session:
 
 ```bash
-# Project-level (shared with team via git)
-cp skills/engineering/build.md your-project/.claude/commands/build.md
+# Clone the repo
+git clone https://github.com/Firas-Bchir/claude-skills.git
 
-# User-level (available in all your projects)
-cp skills/engineering/build.md ~/.claude/commands/build.md
+# Create your commands directory (if it doesn't exist)
+mkdir -p ~/.claude/commands
+
+# Copy all skills
+find claude-skills/skills -name "*.md" ! -name "README.md" -exec cp {} ~/.claude/commands/ \;
 ```
 
-**3. Use it** in Claude Code:
+That's it. Open Claude Code and type `/` — you'll see all 36 skills ready to use.
+
+### Install a Single Skill
+
+If you only want specific skills:
+
+```bash
+cp claude-skills/skills/engineering/build.md ~/.claude/commands/build.md
+```
+
+### Install for a Specific Project
+
+Share skills with your team by adding them to your project's repo:
+
+```bash
+# Inside your project directory
+mkdir -p .claude/commands
+cp claude-skills/skills/engineering/build.md .claude/commands/build.md
+```
+
+Project-level skills are shared via git — everyone who clones the repo gets them.
+
+### User-Level vs Project-Level
+
+| Location | Scope | Shared with Team |
+|----------|-------|-----------------|
+| `~/.claude/commands/` | Available in **all** your projects | No — only on your machine |
+| `your-project/.claude/commands/` | Available in **that project** only | Yes — committed to git |
+
+### Using a Skill
+
+Type the skill name followed by what you want:
 
 ```
 /build add a user authentication flow with OAuth2
+/fix the login button doesn't respond on mobile
+/hack check the payment flow for vulnerabilities
+/review
 ```
 
-**Or install all skills at once:**
-
-```bash
-# User-level (available in all your projects)
-find skills -name "*.md" ! -name "README.md" -exec cp {} ~/.claude/commands/ \;
-
-# Project-level (shared with team via git)
-find skills -name "*.md" ! -name "README.md" -exec cp {} your-project/.claude/commands/ \;
-```
+Everything after the command name becomes the skill's input, so be specific about what you need.
 
 ## The Skills
 
@@ -119,25 +150,24 @@ find skills -name "*.md" ! -name "README.md" -exec cp {} your-project/.claude/co
 | [`/interview`](skills/learning/interview.md) | Interview architect | Designs technical interview questions, evaluates approaches, provides structured feedback. |
 | [`/convert`](skills/learning/convert.md) | Code converter | Ports code between languages/frameworks preserving logic, idioms, and edge case handling. |
 
-## What Makes a Great Skill
+## Staying Updated
 
-Great skills share these properties:
+Pull the latest skills anytime:
+
+```bash
+cd claude-skills && git pull
+
+# Re-copy to your commands directory
+find skills -name "*.md" ! -name "README.md" -exec cp {} ~/.claude/commands/ \;
+```
+
+## What Makes a Great Skill
 
 1. **Opinionated** — Hard rules, not suggestions. "NEVER do X" beats "consider avoiding X."
 2. **Sequential** — Mandatory steps in order. No skipping to the "fun part."
 3. **Verification gates** — Built-in checkpoints that catch mistakes before they ship.
 4. **Battle-tested** — Born from real incidents, not hypothetical best practices.
 5. **Scope-limited** — Does one thing extremely well. No Swiss Army knives.
-
-## Passing Arguments
-
-Skills support arguments via `$ARGUMENTS`. When you type:
-
-```
-/hack check the authentication flow for session fixation
-```
-
-The text after the skill name becomes `$ARGUMENTS` in the prompt, letting the skill focus on exactly what you need.
 
 ## Contributing
 
