@@ -69,3 +69,4 @@ Brief description of what this skill does, when to use it, and what makes it dif
 - Skills that duplicate existing ones without meaningful improvement
 - Framework-specific skills that only work with one technology (skills should be universal)
 - Skills without hard rules or verification steps
+
